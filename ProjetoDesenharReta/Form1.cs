@@ -51,6 +51,115 @@ namespace ProjetoDesenharReta
            
         }
 
+        private void alg_Bresenham(int x1, int y1, int x2, int y2, Bitmap bmp)
+        {
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+            int x = x1;
+            int y = y1;
+            int x_inc, y_inc;
+            int p;
+            if (dx > 0)
+            {
+                x_inc = 1;
+            }
+            else
+            {
+                x_inc = -1;
+                dx = (int)Math.Abs(dx);
+            }
+            if (dy > 0)
+            {
+                y_inc = 1;
+            }
+            else
+            {
+                y_inc = -1;
+                dy = (int)Math.Abs(dy);
+            }
+            //1,4,5 e 8
+            if (dx > dy)
+            {
+                p = 2 * dy - dx;
+                for (int i = 0; i < dx; i++)
+                {
+                    bmp.SetPixel(x, 359 - y, Color.Blue);
+                    x += x_inc;
+                    if (p < 0)
+                    {
+                        p += 2 * dy;
+                    }
+                    else
+                    {
+                        y += y_inc;
+                        p += 2 * (dy - dx);
+                    }
+                }
+            }
+            else
+            {
+                p = 2 * dx - dy;
+                for (int i = 0; i < dy; i++)
+                {
+                    bmp.SetPixel(x, 359 - y, Color.Blue);
+                    y += y_inc;
+                    if (p < 0)
+                    {
+                        p += 2 * dx;
+
+                    }
+                    else
+                    {
+                        x += x_inc;
+                        p += 2 * (dx - dy);
+                    }
+                }
+            }
+        }
+
+        public void PontoMedio(int px, int py, int r, Bitmap bmp)
+        {
+            int p;
+            int x = 0;
+            int y = r;
+            
+            bmp.SetPixel(px + r, py, Color.Red);
+            bmp.SetPixel(px - r, py, Color.Red);
+            bmp.SetPixel(px, py + r, Color.Red);
+            bmp.SetPixel(px, py - r, Color.Red);
+            p = 1 - r;
+            while (x < y)
+            {
+                x++;
+                if (p < 0)
+                {
+                    p = p + 2 * x + 1;
+                    bmp.SetPixel(px + x, py + y, Color.Blue);
+                    bmp.SetPixel(px + y, py + x, Color.Blue);
+                    bmp.SetPixel(px + y, py - x, Color.Blue);
+                    bmp.SetPixel(px - x, py + y, Color.Blue);
+                    bmp.SetPixel(px - x, py - y, Color.Blue);
+                    bmp.SetPixel(px - y, py - x, Color.Blue);
+                    bmp.SetPixel(px - y, py + x, Color.Blue);
+                    bmp.SetPixel(px + x, py - y, Color.Blue);
+                }
+                else
+                {
+                    y--;
+                    p = p + 2 * x + 1 - 2 * y;
+                    bmp.SetPixel(px + x, py + y, Color.Blue);
+                    bmp.SetPixel(px + y, py + x, Color.Blue);
+                    bmp.SetPixel(px + y, py - x, Color.Blue);
+                    bmp.SetPixel(px - x, py + y, Color.Blue);
+                    bmp.SetPixel(px - x, py - y, Color.Blue);
+                    bmp.SetPixel(px - y, py - x, Color.Blue);
+                    bmp.SetPixel(px - y, py + x, Color.Blue);
+                    bmp.SetPixel(px + x, py - y, Color.Blue);
+                }
+            }
+            pictureBox1.Image = bmp;
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -60,6 +169,22 @@ namespace ProjetoDesenharReta
             else
                 bresenhanV(x1, (359 - y1), x2, (359 - y2), bmp);
             
+            pictureBox1.Image = bmp;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            PontoMedio(150, 50, 50, bmp);
+            alg_Bresenham(100, (359 - 50), 100, (359 - 250), bmp);
+            alg_Bresenham(200, (359 - 50), 200, (359 - 250), bmp);
+            PontoMedio(150, 250, 50, bmp);
+
+
+            PontoMedio(300, 300, 50, bmp);
+            alg_Bresenham(300, (359 - 260), 300, (359 - 300), bmp);
+            alg_Bresenham(300, (359 - 300),335, (359 - 300), bmp);
+
             pictureBox1.Image = bmp;
         }
 
